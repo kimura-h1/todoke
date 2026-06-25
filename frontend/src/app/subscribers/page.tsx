@@ -1,0 +1,95 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+type Subscriber = {
+  id: number
+  email: string
+  created_at: string
+}
+
+export default function SubscribersPage() {
+  const router = useRouter()
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([])
+  const [loading, setLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      router.push('/login')
+      return
+    }
+
+    fetch('http://localhost:8080/subscribers', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSubscribers(data || [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [router])
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText('http://localhost:3001/subscribe')
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      <header className="border-b px-6 py-4 flex justify-between items-center">
+        <h1 className="text-lg font-bold tracking-tight">Todoke</h1>
+        <button
+          onClick={() => router.push('/dashboard')}
+          className="text-xs text-gray-400 hover:text-black transition-colors"
+        >
+          ← 戻る
+        </button>
+      </header>
+
+      <main className="max-w-2xl mx-auto mt-12 px-6">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-sm font-medium text-gray-400">購読者一覧</h2>
+            <p className="text-xs text-gray-400 mt-0.5">{subscribers.length}人が購読中</p>
+          </div>
+          <button
+            onClick={handleCopy}
+            className="text-xs text-black border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors"
+          >
+            {copied ? 'コピーしました' : '購読URLをコピー'}
+          </button>
+        </div>
+
+        {loading ? (
+          <p className="text-sm text-gray-400">読み込み中...</p>
+        ) : subscribers.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-sm text-gray-400">まだ購読者がいません</p>
+            <button
+              onClick={handleCopy}
+              className="mt-4 text-xs text-black underline"
+            >
+              購読URLをシェアする
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            {subscribers.map((s) => (
+              <div key={s.id} className="py-4 border-b flex justify-between items-center">
+                <p className="text-sm">{s.email}</p>
+                <p className="text-xs text-gray-400">
+                  {new Date(s.created_at).toLocaleDateString('ja-JP')}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
