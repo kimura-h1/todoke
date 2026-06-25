@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/h1-kimura/newsletter-app/db"
+	"github.com/h1-kimura/newsletter-app/middleware"
 )
 
 type Article struct {
@@ -49,9 +50,15 @@ func PostArticle(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewDecoder(r.Body).Decode(&input)
 
+	userID, ok := r.Context().Value(middleware.UserIDKey).(int)
+	if !ok {
+		http.Error(w, "認証エラー", http.StatusUnauthorized)
+		return
+	}
+
 	_, err := db.DB.Exec(
 		"INSERT INTO articles (user_id, title, body) VALUES ($1, $2, $3)",
-		13, input.Title, input.Body,
+		userID, input.Title, input.Body,
 	)
 	if err != nil {
 		log.Println("DBエラー:", err)

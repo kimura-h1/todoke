@@ -6,6 +6,7 @@ import (
 
 	"github.com/h1-kimura/newsletter-app/db"
 	"github.com/h1-kimura/newsletter-app/handler"
+	"github.com/h1-kimura/newsletter-app/middleware"
 )
 
 func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
@@ -26,17 +27,21 @@ func main() {
 		log.Fatal("DB初期化失敗:", err)
 	}
 
-	http.HandleFunc("/send", corsMiddleware(handler.SendNewsletter))
+	// 認証不要
 	http.HandleFunc("/register", corsMiddleware(handler.RegisterUser))
 	http.HandleFunc("/login", corsMiddleware(handler.LoginUser))
 	http.HandleFunc("/subscribe", corsMiddleware(handler.Subscribe))
-	http.HandleFunc("/subscribers", corsMiddleware(handler.GetSubscribers))
-	http.HandleFunc("/articles", corsMiddleware(func(w http.ResponseWriter, r *http.Request) {
+
+	// 認証必要
+	http.HandleFunc("/articles", corsMiddleware(middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			handler.GetArticles(w, r)
 		} else if r.Method == http.MethodPost {
 			handler.PostArticle(w, r)
 		}
-	}))
+	})))
+	http.HandleFunc("/subscribers", corsMiddleware(middleware.AuthMiddleware(handler.GetSubscribers)))
+	http.HandleFunc("/send", corsMiddleware(middleware.AuthMiddleware(handler.SendNewsletter)))
+
 	http.ListenAndServe(":8080", nil)
 }
