@@ -35,18 +35,7 @@ export default function ArticlesPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b px-6 py-4 flex justify-between items-center">
-        <h1 className="text-lg font-bold tracking-tight">Newsletter</h1>
-        <button
-          onClick={() => router.push('/articles/new')}
-          className="text-xs text-black border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors"
-        >
-          記事を書く
-        </button>
-      </header>
-
-      <main className="max-w-2xl mx-auto mt-12 px-6">
+     <div className="p-10">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-sm font-medium text-gray-400">記事一覧</h2>
           <button
@@ -82,7 +71,6 @@ export default function ArticlesPage() {
             ))}
           </div>
         )}
-      </main>
     </div>
   )
 }

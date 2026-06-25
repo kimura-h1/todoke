@@ -34,18 +34,7 @@ export default function NewArticlePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b px-6 py-4 flex justify-between items-center">
-        <h1 className="text-lg font-bold tracking-tight">Newsletter</h1>
-        <button
-          onClick={() => router.push('/articles')}
-          className="text-xs text-gray-400 hover:text-black transition-colors"
-        >
-          ← 戻る
-        </button>
-      </header>
-
-      <main className="max-w-2xl mx-auto mt-12 px-6">
+     <div className="p-10">
         <h2 className="text-sm font-medium text-gray-400 mb-8">記事を書く</h2>
 
         {error && (
@@ -85,7 +74,6 @@ export default function NewArticlePage() {
             投稿する
           </button>
         </form>
-      </main>
     </div>
   )
 }

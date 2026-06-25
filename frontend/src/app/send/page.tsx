@@ -57,18 +57,7 @@ export default function SendPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b px-6 py-4 flex justify-between items-center">
-        <h1 className="text-lg font-bold tracking-tight">Todoke</h1>
-        <button
-          onClick={() => router.push('/dashboard')}
-          className="text-xs text-gray-400 hover:text-black transition-colors"
-        >
-          ← 戻る
-        </button>
-      </header>
-
-      <main className="max-w-2xl mx-auto mt-12 px-6">
+     <div className="p-10">
         {success ? (
           <div className="text-center py-20">
             <p className="text-sm font-medium">配信完了しました</p>
@@ -132,7 +121,6 @@ export default function SendPage() {
             )}
           </>
         )}
-      </main>
     </div>
   )
 }
