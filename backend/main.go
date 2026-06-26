@@ -40,8 +40,18 @@ func main() {
 			handler.PostArticle(w, r)
 		}
 	})))
+
+	http.HandleFunc("/articles/", corsMiddleware(middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handler.GetArticle(w, r)
+		} else if r.Method == http.MethodPut {
+			handler.UpdateArticle(w, r)
+		} else if r.Method == http.MethodDelete {
+			handler.DeleteArticle(w, r)
+		}
+	})))
+
 	http.HandleFunc("/subscribers", corsMiddleware(middleware.AuthMiddleware(handler.GetSubscribers)))
 	http.HandleFunc("/send", corsMiddleware(middleware.AuthMiddleware(handler.SendNewsletter)))
-
 	http.ListenAndServe(":8080", nil)
 }
