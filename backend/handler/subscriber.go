@@ -64,3 +64,28 @@ func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(subscribers)
 }
+
+func Unsubscribe(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Email string `json:"email"`
+	}
+	json.NewDecoder(r.Body).Decode(&input)
+
+	if input.Email == "" {
+		http.Error(w, "メールアドレスが必要です", http.StatusBadRequest)
+		return
+	}
+
+	_, err := db.DB.Exec(
+		"DELETE FROM subscribers WHERE email = $1",
+		input.Email,
+	)
+	if err != nil {
+		log.Println("DBエラー:", err)
+		http.Error(w, "登録失敗", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "購読解除しました"})
+}

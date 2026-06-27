@@ -57,8 +57,8 @@ func main() {
 			handler.DeleteArticle(w, r)
 		}
 	})))
-
 	http.HandleFunc("/subscribers", corsMiddleware(middleware.AuthMiddleware(handler.GetSubscribers)))
+	http.HandleFunc("/unsubscribe", corsMiddleware(handler.Unsubscribe))
 	http.HandleFunc("/send", corsMiddleware(middleware.AuthMiddleware(handler.SendNewsletter)))
 	http.ListenAndServe(":8080", nil)
 }
