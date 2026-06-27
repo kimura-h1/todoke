@@ -58,7 +58,9 @@ func SendNewsletter(w http.ResponseWriter, r *http.Request) {
 	successCount := 0
 	for _, email := range emails {
 		to := mail.NewEmail("", email)
-		message := mail.NewSingleEmail(from, title, to, body, "<p>"+body+"</p>")
+		unsubscribeLink := "http://localhost:3001/unsubscribe?email=" + email
+		htmlBody := "<p>" + body + "</p><br><hr><p style='font-size:12px;color:gray;'><a href='" + unsubscribeLink + "'>購読解除はこちら</a></p>"
+		message := mail.NewSingleEmail(from, title, to, body, htmlBody)
 		_, err := client.Send(message)
 		response, err := client.Send(message)
 		if err != nil {
