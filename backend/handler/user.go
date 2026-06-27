@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -12,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtSecret = []byte("secret-key")
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var user struct {

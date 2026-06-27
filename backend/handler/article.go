@@ -19,8 +19,15 @@ type Article struct {
 }
 
 func GetArticles(w http.ResponseWriter, r *http.Request) {
+	userID, ok := r.Context().Value(middleware.UserIDKey).(int)
+	if !ok {
+		http.Error(w, "認証エラー", http.StatusUnauthorized)
+		return
+	}
+
 	rows, err := db.DB.Query(
-		"SELECT id, user_id, title, body, created_at FROM articles ORDER BY created_at DESC",
+		"SELECT id, user_id, title, body, created_at FROM articles WHERE user_id = $1 ORDER BY created_at DESC",
+		userID,
 	)
 	if err != nil {
 		log.Println("DBエラー:", err)
@@ -87,7 +94,9 @@ func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	id := parts[len(parts)-1]
 
-	_, err := db.DB.Exec(
+	log.Println("更新対象 id:", id, "userID:", userID, "title:", input.Title)
+
+	result, err := db.DB.Exec(
 		"UPDATE articles SET title = $1, body = $2 WHERE id = $3 AND user_id = $4",
 		input.Title, input.Body, id, userID,
 	)
@@ -96,6 +105,9 @@ func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "更新失敗", http.StatusInternalServerError)
 		return
 	}
+
+	rows, _ := result.RowsAffected()
+	log.Println("更新された行数:", rows)
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"message": "更新成功"})

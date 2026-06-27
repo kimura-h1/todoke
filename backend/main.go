@@ -3,10 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/h1-kimura/newsletter-app/db"
 	"github.com/h1-kimura/newsletter-app/handler"
 	"github.com/h1-kimura/newsletter-app/middleware"
+	"github.com/joho/godotenv"
 )
 
 func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
@@ -23,6 +25,11 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
+
+	godotenv.Load()
+
+	os.Getenv("DB_USER")
+
 	if err := db.Init(); err != nil {
 		log.Fatal("DB初期化失敗:", err)
 	}
