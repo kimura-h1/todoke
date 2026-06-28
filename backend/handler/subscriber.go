@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/h1-kimura/newsletter-app/db"
+	"github.com/lib/pq"
 )
 
 func Subscribe(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +25,10 @@ func Subscribe(w http.ResponseWriter, r *http.Request) {
 		input.Email,
 	)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			http.Error(w, "このメールアドレスはすでに登録されています", http.StatusConflict)
+			return
+		}
 		log.Println("DBエラー:", err)
 		http.Error(w, "登録失敗", http.StatusInternalServerError)
 		return
