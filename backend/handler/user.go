@@ -10,6 +10,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/h1-kimura/newsletter-app/db"
+	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -32,6 +33,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		user.Email, string(hashedPassword),
 	)
 	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			http.Error(w, "このメールアドレスはすでに登録されています", http.StatusConflict)
+			return
+		}
 		log.Println("DBエラー:", err)
 		http.Error(w, "登録失敗", http.StatusInternalServerError)
 		return

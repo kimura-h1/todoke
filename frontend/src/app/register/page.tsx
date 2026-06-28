@@ -19,6 +19,8 @@ export default function RegisterPage() {
     })
     if (res.ok) {
       router.push('/login')
+    } else if (res.status === 409) {
+      setError('このメールアドレスはすでに登録されています')
     } else {
       setError('登録に失敗しました')
     }
