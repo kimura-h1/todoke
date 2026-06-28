@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Sidebar from './Sidebar'
 
-const noSidebarPages = ['/login', '/register', '/subscribe','/']
+const noSidebarPages = ['/login', '/register', '/subscribe', '/unsubscribe', '/']
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
