@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 type Article = {
   id: number
@@ -23,7 +24,7 @@ export default function ArticlesPage() {
       return
     }
 
-    fetch('http://localhost:8080/articles', {
+    fetch(`${API_URL}/articles`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -81,7 +82,7 @@ export default function ArticlesPage() {
                     onClick={async () => {
                       if (!window.confirm('本当に削除しますか？')) return
                       const token = localStorage.getItem('token')
-                      const res = await fetch(`http://localhost:8080/articles/${article.id}`, {
+                      const res = await fetch(`${API_URL}/articles/${article.id}`, {
                         method: 'DELETE',
                         headers: { Authorization: `Bearer ${token}` },
                       })

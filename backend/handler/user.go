@@ -13,8 +13,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
-
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var user struct {
 		Email    string `json:"email"`
@@ -72,7 +70,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		"user_id": id,
 		"exp":     time.Now().Add(24 * time.Hour).Unix(),
 	})
-	tokenString, err := token.SignedString(jwtSecret)
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		http.Error(w, "トークン生成失敗", http.StatusInternalServerError)
 		return

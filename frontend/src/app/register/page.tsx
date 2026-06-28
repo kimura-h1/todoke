@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -11,7 +12,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await fetch('http://localhost:8080/register', {
+    const res = await fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),

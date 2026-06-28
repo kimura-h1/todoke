@@ -82,7 +82,7 @@ func Unsubscribe(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		log.Println("DBエラー:", err)
-		http.Error(w, "登録失敗", http.StatusInternalServerError)
+		http.Error(w, "登録解除失敗", http.StatusInternalServerError)
 		return
 	}
 

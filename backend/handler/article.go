@@ -109,7 +109,7 @@ func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	rows, _ := result.RowsAffected()
 	log.Println("更新された行数:", rows)
 
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "更新成功"})
 }
 
@@ -134,7 +134,7 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "削除成功"})
 }
 

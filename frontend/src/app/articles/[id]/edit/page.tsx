@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 export default function EditArticlePage() {
   const router = useRouter()
@@ -19,7 +20,7 @@ export default function EditArticlePage() {
       return
     }
 
-    fetch(`http://localhost:8080/articles/${id}`, {
+    fetch(`${API_URL}/articles/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -39,7 +40,7 @@ export default function EditArticlePage() {
       return
     }
 
-    const res = await fetch(`http://localhost:8080/articles/${id}`, {
+    const res = await fetch(`${API_URL}/articles/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

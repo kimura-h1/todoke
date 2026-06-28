@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 export default function NewArticlePage() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function NewArticlePage() {
       return
     }
 
-    const res = await fetch('http://localhost:8080/articles', {
+    const res = await fetch(`${API_URL}/articles`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

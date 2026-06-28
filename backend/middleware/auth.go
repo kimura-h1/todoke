@@ -9,8 +9,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
-
 type contextKey string
 
 const UserIDKey contextKey = "user_id"
@@ -26,7 +24,7 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-			return jwtSecret, nil
+			return []byte(os.Getenv("JWT_SECRET")), nil
 		})
 		if err != nil || !token.Valid {
 			http.Error(w, "トークンが無効です", http.StatusUnauthorized)

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 type Article = {
   id: number
@@ -25,7 +26,7 @@ export default function SendPage() {
       return
     }
 
-    fetch('http://localhost:8080/articles', {
+    fetch(`${API_URL}/articles`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -38,7 +39,7 @@ export default function SendPage() {
     setError('')
 
     const token = localStorage.getItem('token')
-    const res = await fetch('http://localhost:8080/send', {
+    const res = await fetch(`${API_URL}/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
