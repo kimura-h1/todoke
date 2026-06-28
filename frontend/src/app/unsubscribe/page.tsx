@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 function UnsubscribeContent() {
   const searchParams = useSearchParams()
@@ -15,7 +16,7 @@ function UnsubscribeContent() {
       return
     }
 
-    const res = await fetch('http://localhost:8080/unsubscribe', {
+    const res = await fetch(`${API_URL}/unsubscribe`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),

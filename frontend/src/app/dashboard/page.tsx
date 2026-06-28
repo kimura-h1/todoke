@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -15,13 +16,13 @@ export default function DashboardPage() {
       return
     }
 
-    fetch('http://localhost:8080/subscribers', {
+    fetch(`${API_URL}/subscribers`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setSubscriberCount(data?.length || 0))
 
-    fetch('http://localhost:8080/articles', {
+    fetch(`${API_URL}/articles`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())

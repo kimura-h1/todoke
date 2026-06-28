@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import API_URL from '@/lib/api'
 
 type Subscriber = {
   id: number
@@ -22,7 +23,7 @@ export default function SubscribersPage() {
       return
     }
 
-    fetch('http://localhost:8080/subscribers', {
+    fetch(`${API_URL}/subscribers`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -34,7 +35,7 @@ export default function SubscribersPage() {
   }, [router])
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('http://localhost:3001/subscribe')
+    navigator.clipboard.writeText(`${window.location.origin}/subscribe`)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }

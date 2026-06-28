@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import API_URL from '@/lib/api'
 
 export default function SubscribePage() {
   const [email, setEmail] = useState('')
@@ -9,7 +10,7 @@ export default function SubscribePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await fetch('http://localhost:8080/subscribe', {
+    const res = await fetch(`${API_URL}/subscribe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
